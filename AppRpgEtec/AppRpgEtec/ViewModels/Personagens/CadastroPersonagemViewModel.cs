@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using AppRpgEtec.Models;
 using AppRpgEtec.Models.Enums;
@@ -11,7 +7,7 @@ using AppRpgEtec.Services.Personagens;
 
 namespace AppRpgEtec.ViewModels.Personagens;
    
-[QueryProperty("PersonagemSelecionadoId","pId")]
+[QueryProperty("PersonagemSelecionadoId", "pId")]
 public class CadastroPersonagemViewModel : BaseViewModel
 {
     private PersonagemService pService;
@@ -64,7 +60,7 @@ public class CadastroPersonagemViewModel : BaseViewModel
             if (value != null)
             {
                 personagemSelecionadoId = Uri.UnescapeDataString(value);
-                CarregarPersonagem();
+                //CarregarPersonagem();
             }
         }
     }
@@ -159,8 +155,6 @@ public class CadastroPersonagemViewModel : BaseViewModel
             this.Inteligencia = p.Inteligencia;
             this.Vitorias = p.Vitorias;
             this.Id = p.Id;
-
-            TipoClasseSelecionado = this.TipoClasseSelecionado.FirstOrDefault(tClasse => tClasse.Id == (int)p.Classe);
         }
         catch (Exception ex)
         {

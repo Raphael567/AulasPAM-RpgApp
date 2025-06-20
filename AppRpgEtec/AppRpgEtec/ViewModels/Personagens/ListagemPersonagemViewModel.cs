@@ -49,14 +49,21 @@ namespace AppRpgEtec.ViewModels.Personagens
         {
             try
             {
-                Personagens = await pService.GetPersonagensAsync();
-                OnPropertyChanged(nameof(Personagens));
+                var lista = await pService.GetPersonagensAsync();
+                Personagens.Clear();
+                foreach (var p in lista)
+                {
+                    Personagens.Add(p);
+                }
+
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 await Application.Current.MainPage
-                    .DisplayAlert("Ops", ex.Message + "Detalhes: " + ex.InnerException, "Ok");
+                    .DisplayAlert("Ops", ex.Message + " Detalhes: " + ex.InnerException, "Ok");
             }
         }
+
         public async Task ExibirCadastroPersonagem()
         {
             try

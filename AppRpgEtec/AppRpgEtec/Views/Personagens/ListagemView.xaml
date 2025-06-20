@@ -20,9 +20,15 @@
                                     CommandParameter="{Binding .}">
                                 </MenuItem>
                             </ViewCell.ContextActions>
+                            <StackLayout Padding="10">
+                                <Label Text="{Binding Nome}" FontSize="Medium" />
+                                <Label Text="{Binding Classe}" FontSize="Small" TextColor="Gray" />
+                                <Label Text="{Binding PontosVida}" FontSize="Small" TextColor="Gray" />
+                            </StackLayout>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
+
             </ListView>
         </VerticalStackLayout>
     </ScrollView>

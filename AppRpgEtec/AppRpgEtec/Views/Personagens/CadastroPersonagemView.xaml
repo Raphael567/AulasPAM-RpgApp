@@ -7,12 +7,13 @@
     <ScrollView>
         <VerticalStackLayout Spacing="3" Padding="15">
 
-            <ListView x:Name="listView" HasUneRows="True" ItemSource="{Binding Personagens}"
-                      SelectedItem="{Binging PersonagemSelecionado}">
+            <ListView x:Name="listView" HasUnevenRows="True" ItemsSource="{Binding Personagens}"
+                      SelectedItem="{Binding PersonagemSelecionado}">
             </ListView>
 
+
             <Label Text="Id" FontSize="Medium" />
-            <Entry Text="{Binding Id}" IsEnable="False " FontSize="Medium" />
+            <Entry Text="{Binding Id}" IsEnabled="False " FontSize="Medium" />
 
             <Label Text="Nome" FontSize="Medium" />
             <Entry Text="{Binding Nome}" FontSize="Medium" />
