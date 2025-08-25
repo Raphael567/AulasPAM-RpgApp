@@ -3,10 +3,10 @@
     x:Class="AppRpgEtec.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:AppRpgEtec"
+    xmlns:viewsPersonagens="clr-namespace:AppRpgEtec.Views.Personagens"
     xmlns:viewUsuarios ="clr-namespace:AppRpgEtec.Views.Usuarios"
-    xmlns:viewsPersonagens = "clr-namespace:AppRpgEtec.Views.Personagens"
     xmlns:viewsDisputas = "clr-namespace:AppRpgEtec.Views.Disputas"
-    Shell.FlyoutBehavior="Disabled"
     Title="AppRpgEtec">
     <Shell.FlyoutHeaderTemplate>
 
@@ -30,20 +30,35 @@
         </DataTemplate>
     </Shell.FlyoutHeaderTemplate>
 
-    <ShellContent
+    <FlyoutItem FlyoutDisplayOptions="AsMultipleItems">
+
+        <ShellContent
         Title="Home" Icon= "home.svg"
         ContentTemplate="{DataTemplate local:MainPage}" Route="MainPage"/>
-    
-    <ShellContent
-        Title="Home" Icon= "home.svg"
+
+        <ShellContent
+        Title="Personagens" Icon= "menupersonagens.svg"
         ContentTemplate="{DataTemplate viewsPersonagens:ListagemView}"  Route="ListagemView"/>
 
-    <ShellContent
+        <ShellContent
        Title="Usuários" Icon="menuuusarios.svg"
         ContentTemplate="{DataTemplate viewUsuarios:ListagemView}"/>
-    
-    <ShellContent
+
+        <ShellContent
    Title="Disputas" Icon="menudisputas.svg"
     ContentTemplate="{DataTemplate viewsDisputas:ListagemView}"/>
-    
+
+
+        <Tab Title="Info" Route="info" Icon="info.svg">
+            <ShellContent Title="Sobre" Route="sobre" ContentTemplate="{DataTemplate local:AboutView}" />
+            <ShellContent Title="Descrição" Route="desc" ContentTemplate="{DataTemplate local:DescriptionView}" />
+        </Tab>
+    </FlyoutItem>
+
+    <ShellContent Title="Sair" Icon="Exit.pbg" ContentTemplate="{DataTemplate viewUsuarios:LoginView}"
+                  Shell.FlyoutBehavior="Disabled"/>
+    <Shell.FlyoutFooter>
+        <Label x:Name="lblLogin" TextColor="Black" FontAttributes="Bold" HorizontalOptions="Center" />
+    </Shell.FlyoutFooter>
+
 </Shell>
