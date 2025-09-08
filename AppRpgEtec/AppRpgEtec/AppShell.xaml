@@ -40,7 +40,7 @@
 
     <ShellContent
        Title="Usuários" Icon="menuuusarios.svg"
-        ContentTemplate="{DataTemplate viewUsuarios:ListagemView}"/>
+        ContentTemplate="{DataTemplate viewsUsuarios:LocalizacaoView}"/>
     
     <ShellContent
    Title="Disputas" Icon="menudisputas.svg"
