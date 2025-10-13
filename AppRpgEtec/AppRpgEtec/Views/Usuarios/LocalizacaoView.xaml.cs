@@ -4,15 +4,14 @@ namespace AppRpgEtec.Views.Usuarios;
 
 public partial class LocalizacaoView : ContentPage
 {
-    LocalizacaoViewModel viewModels;
-
-    public LocalizacaoView()
+	LocalizacaoViewModel viewModel;
+	public LocalizacaoView()
 	{
 		InitializeComponent();
 
-		viewModels = new LocalizacaoViewModel();
-		viewModels.InicializarMapa();
-
-		BindingContext = viewModels;
+		viewModel = new LocalizacaoViewModel();
+		//viewModel.InicializarMapa();
+		BindingContext = viewModel;
+		viewModel.ExibirUsuarioNoMapa();
 	}
 }

@@ -1,10 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-	<application android:allowBackup="true" android:supportsRtl="true"></application>
-
-	<meta-data android:name="com.google.android.geo.API_KEY"
-			   android:value="AIzaSyC-PnX0-KnIDHfFdsfraG1xgpWG2JEStdY=">
-	</meta-data>
+	<application android:allowBackup="true" android:supportsRtl="true">
+		<meta-data android:name="com.google.android.geo.API_KEY"
+				   android:value="AIzaSyD4r0nlFSo80wMvwlvbk1QGbtkZ7bIbdoM">
+			
+		</meta-data>
+		
+	</application>
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 	<uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
