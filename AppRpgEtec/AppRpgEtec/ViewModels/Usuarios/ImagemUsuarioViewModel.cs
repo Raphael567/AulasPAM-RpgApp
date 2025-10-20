@@ -24,10 +24,12 @@ namespace AppRpgEtec.ViewModels.Usuarios
 
             FotografarCommand = new Command(Fotografar);
             SalvarImagemCommand = new Command(SalvarImagemAzure);
+            AbrirGaleriaCommand = new Command(AbrirGaleria);
         }
 
         public ICommand FotografarCommand { get; }
         public ICommand SalvarImagemCommand { get; }
+        public ICommand AbrirGaleriaCommand { get; }
 
         private ImageSource fonteImagem;
         public ImageSource FonteImagem
@@ -105,6 +107,36 @@ namespace AppRpgEtec.ViewModels.Usuarios
             catch (Exception ex)
             {
                 await Application.Current.MainPage.DisplayAlert("Ops", ex.Message + "Detalhes: " + ex.InnerException, "Ok");
+            }
+        }
+
+            public async void AbrirGaleria()
+        {
+            try
+            {
+                if (MediaPicker.Default.IsCaptureSupported)
+                {
+                    FileResult photo = await MediaPicker.Default.PickPhotoAsync();
+                    if (photo != null)
+                    {
+                        using (Stream sourceStream = await photo.OpenReadAsync())
+                        {
+                            using (MemoryStream ms = new MemoryStream())
+                            {
+                                await sourceStream.CopyToAsync(ms);
+                                Foto = ms.ToArray();
+                                FonteImagem = ImageSource.FromStream(() => new MemoryStream(ms.ToArray()));
+                            }
+                        }
+
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage
+                    .DisplayAlert("Ops", ex.Message + "Detalhes: " + ex.InnerException, "Ok");
             }
         }
     }
