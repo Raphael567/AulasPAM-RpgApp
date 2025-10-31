@@ -74,7 +74,5 @@ namespace AppRpgEtec.Services.Usuarios
             _request.GetAsync<Models.Usuario>(_apiUrlBase + urlComplementar, _token);
             return usuario;
         }
-
-
     }
 }
