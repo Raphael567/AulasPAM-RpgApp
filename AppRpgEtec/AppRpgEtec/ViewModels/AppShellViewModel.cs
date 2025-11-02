@@ -12,7 +12,7 @@ namespace AppRpgEtec.ViewModels
     public class AppShellViewModel : BaseViewModel
     {
         private UsuarioService uService;
-        private static string conexaoAzureStorage = "DefaultEndpointsProtocol=https;AccountName=rpgstorage;AccountKey=5lICnm3gQd9O49dC0y072ADvS/upL2mtE/TznGKfOjlmgCzowNzmhfxB5sfzpOR9IfHyGKbeht5X+AStEpvukQ==;EndpointSuffix=core.windows.net";
+        private static string conexaoAzureStorage = "DefaultEndpointsProtocol=https;AccountName=raphaellenstorage;AccountKey=avSDhzlqkxStiLOMPQLl1ulYsTIKOoNa5FjdC9kWU6+tTAgicQNGMGpRfvuDMu22NqbxuFmknpW++AStyeW/xg==;EndpointSuffix=core.windows.net";
         private static string container = "arquivos";
         public AppShellViewModel()
         {
