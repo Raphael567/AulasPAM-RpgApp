@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
+
 namespace AppRpgEtec.ViewModels.Personagens
 {
     [QueryProperty("PersonagemSelecionadoId", "pId")]
