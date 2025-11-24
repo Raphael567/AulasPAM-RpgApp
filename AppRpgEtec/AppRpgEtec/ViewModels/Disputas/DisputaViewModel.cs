@@ -2,6 +2,7 @@
 //Hellen Novi Salvador
 
 using AppRpgEtec.Models;
+using AppRpgEtec.Services.Disputas;
 using AppRpgEtec.Services.Personagens;
 using System;
 using System.Collections.Generic;
@@ -21,13 +22,17 @@ namespace AppRpgEtec.ViewModels.Disputas
         public ObservableCollection<Personagem> PersonagensEncontrados { get; set; }
         public Personagem Atacante { get; set; }
         public Personagem Oponente { get; set; }
+        private DisputaService dSerice;
+        public Disputa DisputaPersonagens {  get; set; }
         public DisputaViewModel()
         {
             string token = Preferences.Get("UsuarioToken", string.Empty);
             pService = new PersonagemService(token);
+            dService = new DisputaService(token);
 
             Atacante = new Personagem();
             Oponente = new Personagem();
+            DisputaPersonagens = new Disputa();
 
             PersonagensEncontrados = new ObservableCollection<Personagem>();
 
@@ -108,6 +113,19 @@ namespace AppRpgEtec.ViewModels.Disputas
             {
                 await Application.Current.MainPage
                     .DisplayAlert("Ops", ex.Message + " Detalhes: " + ex.InnerException, "Ok");
+            }
+        }
+
+        private async Task ExecutarDisputaArmada()
+        {
+            try
+            {
+                DisputaPersonagens.AtacanteId = Atacante.Id;
+                DisputaPersonagens.OponenteId = Oponente.Id;
+                DisputaPersonagens = await AdService.PostDisputaComArmasAsync(DisputaPersonagens);
+
+                await Application.Current.MainPage
+                    .DisplayAlert("Resultado")
             }
         }
     }

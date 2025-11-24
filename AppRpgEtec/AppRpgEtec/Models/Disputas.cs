@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace AppRpgEtec.Models
 {
-    public class Disputas
+    public class Disputa
     {
         public int Id { get; set; }
         public DateTime? DataDisputa { get; set; }

@@ -3,12 +3,20 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AppRpgEtec.Views.Personagens.ListagemView"
              Title="ListagemView">
+             xmlns:conv="clr-namespace:AppRpgEtec.Converters"
+    <ContentPage.Resources>
+        <ResurceDictionary>
+            <conv:PontosVidaConverter x:Key="ColorConvert" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <Shell.TitleView>
         <Button Command="{Binding NovoPersonagemCommand}" Text="Novo" HorizontalOptions="End"></Button>
     </Shell.TitleView>
     
     <ScrollView>
         <VerticalStackLayout Padding="10, 0, 0, 0" VerticalOptions="FillAndExpand">
+            <Button Text="Zerar Ranking Geral" Command="{Binding ZerarRankingRestaurarVidasGeralCommand}"
+                FontAttributes="Bold" VerticalOptions="FillAndExpand"/>
             <ListView x:Name="listView" HasUnevenRows="True" 
                       ItemsSource="{Binding Personagens}" SelectedItem="{Binding PersonagemSelecionado}" >
                 <ListView.ItemTemplate>
