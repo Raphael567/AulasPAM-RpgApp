@@ -3,6 +3,7 @@
 
 using AppRpgEtec.Models;
 using AppRpgEtec.Services.Disputa;
+using AppRpgEtec.Services.PersonagemHabilidades;
 using AppRpgEtec.Services.Personagens;
 using System;
 using System.Collections.Generic;
@@ -24,12 +25,15 @@ namespace AppRpgEtec.ViewModels.Disputa
         public Personagem Atacante { get; set; }
         public Personagem Oponente { get; set; }
         private DisputaService dSerice;
-        public Disputas DisputaPersonagens {  get; set; }
+        public Disputas DisputaPersonagens { get; set; }
+        private PersonagemHabilidadeService phService;
+        public ObservableCollection<PersonagemHabilidade> Habilidades { get; set; }
         public DisputaViewModel()
         {
             string token = Preferences.Get("UsuarioToken", string.Empty);
             pService = new PersonagemService(token);
             dService = new DisputaService(token);
+            phService = new PersonagemHabilidadeService(token);
 
             Atacante = new Personagem();
             Oponente = new Personagem();
@@ -39,14 +43,18 @@ namespace AppRpgEtec.ViewModels.Disputa
 
             PesquisarPersonagensCommand = new Command<string>(async (string pesquisa) => { await PesquisarPersonagens(pesquisa); });
             DisputaComArmaCommand = new Command(async () => { await ExecutarDisputaArmada(); });
+            DisputaComHabilidadeCommand = new Command(async () => {  await ExecutarDisputaHabilidades(); });
+            DisputaGeralCommand = new Command(async () => { await ExecutarDisputaGeral(); });
         }
         public ICommand PesquisarPersonagensCommand { get; set; }
         public ICommand DisputaComArmaCommand { get; set; }
+        public ICommand DisputaComHabilidadeCommand { get; set; }
+        public ICommand DisputaGeralCommand { get; set; }
         public Personagem PersonagemSelecionado
         {
             set
             {
-                if(value != null)
+                if (value != null)
                 {
                     personagemSelecionado = value;
                     SelecionarPersonagem(personagemSelecionado);
@@ -60,7 +68,7 @@ namespace AppRpgEtec.ViewModels.Disputa
             get { return textoBuscaDigitado; }
             set
             {
-                if((value != null && !string.IsNullOrEmpty(value) && value.Length > 0))
+                if ((value != null && !string.IsNullOrEmpty(value) && value.Length > 0))
                 {
                     textoBuscaDigitado = value;
                     _ = PesquisarPersonagens(textoBuscaDigitado);
@@ -103,6 +111,7 @@ namespace AppRpgEtec.ViewModels.Disputa
 
                 if (tipoCombatente == "Atacante")
                 {
+                    await this.ObterHabilidadesAsync(p.Id);
                     Atacante = p;
                     OnPropertyChanged(nameof(DescricaoPersonagemAtacante));
                 }
@@ -125,7 +134,7 @@ namespace AppRpgEtec.ViewModels.Disputa
             {
                 DisputaPersonagens.AtacanteId = Atacante.Id;
                 DisputaPersonagens.OponenteId = Oponente.Id;
-                DisputaPersonagens = await dService.PostDisputaComArmasAsync(DisputaPersonagens);
+                DisputaPersonagens = await dService.PostDisputaComArmaAsync(DisputaPersonagens);
 
                 await Application.Current.MainPage
                     .DisplayAlert("Resultado", DisputaPersonagens.Narracao, "OK");
@@ -134,6 +143,78 @@ namespace AppRpgEtec.ViewModels.Disputa
             {
                 await Application.Current.MainPage
                     .DisplayAlert("Ops", ex.Message + "Detalhes: " + ex.InnerException, "OK");
+            }
+        }
+
+        public async Task ObterHabilidadesAsync(int personagemId)
+        {
+            try
+            {
+                Habilidades = await phService.GetPersonagemHabilidadesAsync(personagemId);
+                OnPropertyChanged(nameof(Habilidades));
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage
+                    .DisplayAlert("Ops", ex.Message + "Detalhes: " + ex.InnerException, "OK");
+            }
+        }
+
+        private PersonagemHabilidade habilidadeSelecionada;
+        public PersonagemHabilidade HabilidadeSelecionada
+        {
+            get { return habilidadeSelecionada; }
+            set
+            {
+                if (value != null)
+                {
+                    try
+                    {
+                        habilidadeSelecionada = value;
+                        OnPropertyChanged();
+                    }
+                    catch (Exception ex)
+                    {
+                        Application.Current.MainPage.DisplayAlert("Ops", ex.Message, "OK");
+                    }
+                }
+            }
+        }
+
+        private async Task ExecutarDisputaHabilidades()
+        {
+            try
+            {
+                DisputaPersonagens.AtacanteId = Atacante.Id;
+                DisputaPersonagens.OponenteId = Oponente.Id;
+                DisputaPersonagens = await dService.PostDisputaComHabilidadeAsync(DisputaPersonagens);
+
+                await Application.Current.MainPage
+                    .DisplayAlert("Resultado", DisputaPersonagens.Narracao, "OK");
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage
+                    .DisplayAlert("Ops", ex.Message + "Detalhes: " + ex.InnerException, "OK");
+            }
+        }
+
+        private async Task ExecutarDisputaGeral()
+        {
+            try
+            {
+                ObservableCollection<Personagem> lista = await pService.GetPersonagensAsync();
+                DisputaPersonagens.ListaIdPersonagens = lista.Select(x => x.Id).ToList();
+
+                DisputaPersonagens = await dService.PostDisputaGeralAsync(DisputaPersonagens);
+                string resultados = string.Join(" | ", DisputaPersonagens.Resultados);
+                await Application.Current.MainPage
+                    .DisplayAlert("Resultado", resultados, "OK");
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage
+                    .DisplayAlert("Ops", ex.Message + " Detalhes: " + ex.InnerException, "OK");
             }
         }
     }

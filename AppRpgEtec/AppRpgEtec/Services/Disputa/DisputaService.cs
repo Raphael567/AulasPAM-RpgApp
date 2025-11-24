@@ -20,19 +20,19 @@ namespace AppRpgEtec.Services.Disputa
             _token = token;
         }
 
-        public async Task<Disputas> PostDisputaComArmaAsync(DisputaService d)
+        public async Task<Disputas> PostDisputaComArmaAsync(Disputas d)
         {
             string urlComplementar = "/Arma";
             return await _request.PostAsync(_apiUrlBase + urlComplementar, d, _token);
         }
 
-        public async Task<Disputas> PostDisputaComHabilidadeAsync(DisputaService d)
+        public async Task<Disputas> PostDisputaComHabilidadeAsync(Disputas d)
         {
             string urlComplementar = "/Habilidade";
             return await _request.PostAsync(_apiUrlBase + urlComplementar, d, _token);
         }
 
-        public async Task<Disputas> PostDisputaGeralAsync(DisputaService d)
+        public async Task<Disputas> PostDisputaGeralAsync(Disputas d)
         {
             string urlComplementar = "/DisputaEmGrupo";
             return await _request.PostAsync(_apiUrlBase + urlComplementar, d, _token);

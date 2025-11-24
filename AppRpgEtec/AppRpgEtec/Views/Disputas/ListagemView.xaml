@@ -1,6 +1,3 @@
-//Raphael Pereira Canuto
-//Hellen Novi Salvador   
-    
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
@@ -34,10 +31,16 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
-                <Button Text="Disputar com Arma" FontAttributes="Bold"
-                        Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
-                        VerticalOptions="FillAndExpand" Command="{Binding DisputaComArmaCommand}"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
+            
+            <Button Text="Disputar com Arma" FontAttributes="Bold" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" VerticalOptions="FillAndExpand" Command="{Binding DisputaComArmaCommand}"/>
+            <Picker Title="---Selecione a habilidade do primeiro combatente---" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding Habilidades}" ItemDisplayBinding="{Binding HabilidadeNome}" SelectedItem="{Binding HabilidadeSelecionada}" />
+            <Button Text="Disputas com Habilidades" FontAttributes="Bold" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" VerticalOptions="FillAndExpand" Command="{Binding DisputaComHabilidadeCommand}"/>
+            <Button Text="Disputa Geral" FontAttributes="Bold" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" VerticalOptions="FillAndExpand" Command="{Binding DisputaGeralCommand}"/>
+            
             <Label Text="Atacante: " Grid.Column="0" Grid.Row="0" FontAttributes="Bold" />
             <Label Text="{Binding DescricaoPersonagemAtacante}" Grid.Column="1" Grid.Row="0" TextColor="Blue" />
 

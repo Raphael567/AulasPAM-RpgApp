@@ -1,6 +1,5 @@
 ﻿using AppRpgEtec.Models;
 using AppRpgEtec.Services.Personagens;
-using Kotlin;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -24,7 +23,9 @@ namespace AppRpgEtec.ViewModels.Personagens
             _ = ObterPersonagens();
             NovoPersonagemCommand = new Command(async () => { await ExibirCadastroPersonagem(); });
             RemoverPersonagemCommand = new Command<Personagem>(async (Personagem p) => { await RemoverPersonagem(p); });
+            ZerarRankingRestaurarVidasGeralCommand = new Command(async () => { await ZerarRankingRestaurarVidasGeral(); });
         }
+        public ICommand ZerarRankingRestaurarVidasGeralCommand { get; set; }
         public ICommand NovoPersonagemCommand { get; }
         public ICommand RemoverPersonagemCommand { get; }
         public async Task ObterPersonagens()
@@ -186,7 +187,7 @@ namespace AppRpgEtec.ViewModels.Personagens
             }
         }
 
-        public async async ZerarRankingRestaurarVidasGeral()
+        public async Task ZerarRankingRestaurarVidasGeral()
         {
             try
             {
@@ -205,10 +206,6 @@ namespace AppRpgEtec.ViewModels.Personagens
                 await Application.Current.MainPage
                     .DisplayAlert("Ops...", ex.Message + "Detalhes: " + ex.InnerException, "OK");
             }
-        }
-
-        public ICommand ZerarRankingRestaurarVidasGeralCommand {  get; set; }
-        ZerarRankingRestaurarVidasGeralCommand = new Command(async () => { await ZerarRankingRestaurarVidasGeral(); });
-            
+        }   
     }
 }

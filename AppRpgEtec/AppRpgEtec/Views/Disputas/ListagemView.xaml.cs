@@ -1,4 +1,4 @@
-using AppRpgEtec.ViewModels.Disputas;
+using AppRpgEtec.ViewModels.Disputa;
 
 namespace AppRpgEtec.Views.Disputas;
 

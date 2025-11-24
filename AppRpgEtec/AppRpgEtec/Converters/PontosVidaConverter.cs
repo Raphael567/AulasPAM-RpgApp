@@ -21,7 +21,7 @@ namespace AppRpgEtec.Converters
                 return (Color)converter.ConvertFromInvariantString("YellowGreen");
             else if (pontosVida >= 25)
                 return (Color)converter.ConvertFromInvariantString("OrangeRed");
-            else (pontosVida >= 1)
+            else if (pontosVida >= 1)
                 return (Color)converter.ConvertFromInvariantString("Red");
 
             throw new NotImplementedException();
