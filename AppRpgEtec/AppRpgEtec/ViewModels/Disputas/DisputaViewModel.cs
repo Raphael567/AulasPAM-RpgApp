@@ -2,7 +2,7 @@
 //Hellen Novi Salvador
 
 using AppRpgEtec.Models;
-using AppRpgEtec.Services.Disputas;
+using AppRpgEtec.Services.Disputa;
 using AppRpgEtec.Services.Personagens;
 using System;
 using System.Collections.Generic;
@@ -12,18 +12,19 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace AppRpgEtec.ViewModels.Disputas
+namespace AppRpgEtec.ViewModels.Disputa
 {
     public class DisputaViewModel : BaseViewModel
     {
         private PersonagemService pService;
+        private DisputaService dService;
         private Personagem personagemSelecionado;
         private string textoBuscaDigitado = string.Empty;
         public ObservableCollection<Personagem> PersonagensEncontrados { get; set; }
         public Personagem Atacante { get; set; }
         public Personagem Oponente { get; set; }
         private DisputaService dSerice;
-        public Disputa DisputaPersonagens {  get; set; }
+        public Disputas DisputaPersonagens {  get; set; }
         public DisputaViewModel()
         {
             string token = Preferences.Get("UsuarioToken", string.Empty);
@@ -32,13 +33,15 @@ namespace AppRpgEtec.ViewModels.Disputas
 
             Atacante = new Personagem();
             Oponente = new Personagem();
-            DisputaPersonagens = new Disputa();
+            DisputaPersonagens = new Disputas();
 
             PersonagensEncontrados = new ObservableCollection<Personagem>();
 
             PesquisarPersonagensCommand = new Command<string>(async (string pesquisa) => { await PesquisarPersonagens(pesquisa); });
+            DisputaComArmaCommand = new Command(async () => { await ExecutarDisputaArmada(); });
         }
         public ICommand PesquisarPersonagensCommand { get; set; }
+        public ICommand DisputaComArmaCommand { get; set; }
         public Personagem PersonagemSelecionado
         {
             set
@@ -122,10 +125,15 @@ namespace AppRpgEtec.ViewModels.Disputas
             {
                 DisputaPersonagens.AtacanteId = Atacante.Id;
                 DisputaPersonagens.OponenteId = Oponente.Id;
-                DisputaPersonagens = await AdService.PostDisputaComArmasAsync(DisputaPersonagens);
+                DisputaPersonagens = await dService.PostDisputaComArmasAsync(DisputaPersonagens);
 
                 await Application.Current.MainPage
-                    .DisplayAlert("Resultado")
+                    .DisplayAlert("Resultado", DisputaPersonagens.Narracao, "OK");
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage
+                    .DisplayAlert("Ops", ex.Message + "Detalhes: " + ex.InnerException, "OK");
             }
         }
     }

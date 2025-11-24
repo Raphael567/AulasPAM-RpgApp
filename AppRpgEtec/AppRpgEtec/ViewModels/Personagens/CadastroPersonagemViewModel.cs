@@ -272,8 +272,5 @@ namespace AppRpgEtec.ViewModels.Personagens
                 && Forca != 0
                 && Defesa != 0;
         }
-
-
-
     }
 }

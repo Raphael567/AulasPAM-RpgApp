@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AppRpgEtec.Models;
 
-namespace AppRpgEtec.Services.Disputas
+namespace AppRpgEtec.Services.Disputa
 {
     public class DisputaService : Request
     {
@@ -19,19 +20,19 @@ namespace AppRpgEtec.Services.Disputas
             _token = token;
         }
 
-        public async Task<Disputa> PostDisputaComArmaAsync(DisputaService d)
+        public async Task<Disputas> PostDisputaComArmaAsync(DisputaService d)
         {
             string urlComplementar = "/Arma";
             return await _request.PostAsync(_apiUrlBase + urlComplementar, d, _token);
         }
 
-        public async Task<Disputa> PostDisputaComHabilidadeAsync(DisputaService d)
+        public async Task<Disputas> PostDisputaComHabilidadeAsync(DisputaService d)
         {
             string urlComplementar = "/Habilidade";
             return await _request.PostAsync(_apiUrlBase + urlComplementar, d, _token);
         }
 
-        public async Task<Disputa> PostDisputaGeralAsync(DisputaService d)
+        public async Task<Disputas> PostDisputaGeralAsync(DisputaService d)
         {
             string urlComplementar = "/DisputaEmGrupo";
             return await _request.PostAsync(_apiUrlBase + urlComplementar, d, _token);
