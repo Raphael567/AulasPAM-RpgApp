@@ -1,23 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AppRpgEtec.Models;
-using AppRpgEtec.Services.Personagens;
+﻿using AppRpgEtec.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Input;
 
 namespace AppRpgEtec.Services.PersonagemHabilidades
 {
     public class PersonagemHabilidadeService : Request
     {
         private readonly Request _request = null;
-        private const string _apiUrlBase = "https://rpgraphael-dvejarfmgyfycwba.brazilsouth-01.azurewebsites.net/PersonagemHabilidades";
+        private const string _apiUrlBase = "https://rpgraphael-dvejarfmgyfycwba.brazilsouth-01.azurewebsites.net/PersonagemHabilidades/";
         private string _token;
         public PersonagemHabilidadeService(string token)
         {
@@ -28,16 +22,14 @@ namespace AppRpgEtec.Services.PersonagemHabilidades
         {
             string urlComplementar = string.Format("{0}", personagemId);
             ObservableCollection<Models.PersonagemHabilidade> listaPH = await
-            _request.GetAsync<ObservableCollection<Models.PersonagemHabilidade>>(_apiUrlBase + urlComplementar,
-            _token);
+            _request.GetAsync<ObservableCollection<Models.PersonagemHabilidade>>(_apiUrlBase + urlComplementar, _token);
             return listaPH;
         }
         public async Task<ObservableCollection<Habilidade>> GetHabilidadesAsync()
         {
             string urlComplementar = string.Format("{0}", "GetHabilidades");
-            ObservableCollection<Habilidade> listaHabilidades = await
-            _request.GetAsync<ObservableCollection<Models.Habilidade>>(_apiUrlBase + urlComplementar, _token);
-            return listaHabilidades;
+            ObservableCollection<Models.Habilidade> listaHabilidades = await
+            _request.GetAsync<ObservableCollection<Models.Habilidade>>(_apiUrlBase + urlComplementar, _token); return listaHabilidades;
         }
     }
 }

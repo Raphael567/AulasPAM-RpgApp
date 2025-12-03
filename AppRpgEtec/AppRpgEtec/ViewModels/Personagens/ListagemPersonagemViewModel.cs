@@ -19,25 +19,26 @@ namespace AppRpgEtec.ViewModels.Personagens
             string token = Preferences.Get("UsuarioToken", string.Empty);
             pService = new PersonagemService(token);
             Personagens = new ObservableCollection<Personagem>();
-            
+
             _ = ObterPersonagens();
+            ZerarRankingRestaurarVidasGeralCommand = new Command(async () => { await ZerarRankingRestaurarVidasGeral(); });
+
             NovoPersonagemCommand = new Command(async () => { await ExibirCadastroPersonagem(); });
             RemoverPersonagemCommand = new Command<Personagem>(async (Personagem p) => { await RemoverPersonagem(p); });
-            ZerarRankingRestaurarVidasGeralCommand = new Command(async () => { await ZerarRankingRestaurarVidasGeral(); });
         }
-        public ICommand ZerarRankingRestaurarVidasGeralCommand { get; set; }
         public ICommand NovoPersonagemCommand { get; }
         public ICommand RemoverPersonagemCommand { get; }
+        public ICommand ZerarRankingRestaurarVidasGeralCommand { get; set; }
         public async Task ObterPersonagens()
         {
-            try //Junto com o Cacth evitará que erros fechem o aplicativo
+            try
             {
                 Personagens = await pService.GetPersonagensAsync();
-                OnPropertyChanged(nameof(Personagens)); //Informará a View que houve carregamento                       
+                OnPropertyChanged(nameof(Personagens));                     
             }
             catch (Exception ex)
             {
-                //Captará o erro para exibir em tela
+
                 await Application.Current.MainPage
                     .DisplayAlert("Ops", ex.Message + " Detalhes: " + ex.InnerException, "Ok");
             }
@@ -56,7 +57,52 @@ namespace AppRpgEtec.ViewModels.Personagens
             }
         }
 
-        private Personagem personagemSelecionado;//CTRL + R,E
+        public async Task ExecutarRestaurarPontosPersonagem(Personagem p)
+        {
+            await pService.PutRestaurarPontosAsync(p);
+        }
+
+        public async Task ExecutarZerarRankingPersonagem(Personagem p)
+        {
+            await pService.PutZerarRankingAsync(p);
+        }
+        public async Task ExecutarZerarRankingRestaurarVidasGeral()
+        {
+            await pService.PutZerarRankingRestaurarVidasGeralAsync();
+        }
+        public async Task ZerarRankingRestaurarVidasGeral()
+        {
+            try
+            {
+                if (await Application.Current.MainPage.DisplayAlert("Confirmação",
+                    $"Deseja realmente zerar todo o ranking?", "Yes", "No"))
+                {
+                    // Tenta executar. Se der o erro "Input String", ele vai para o CATCH.
+                    await ExecutarZerarRankingRestaurarVidasGeral();
+
+                    // Se chegou aqui, o PUT funcionou e a linha acima não lançou exceção.
+                    await Application.Current.MainPage.DisplayAlert("Informação", "Ranking zerado com sucesso.", "Ok");
+                    await ObterPersonagens();
+                }
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message.Contains("The input string '' was not in a correct format"))
+                {
+                    await Application.Current.MainPage.DisplayAlert("Informação",
+                       "Ranking zerado com sucesso! Recarregando a lista.", "Ok");
+                    await ObterPersonagens();
+                }
+                else
+                {
+                    // Exibe outros erros
+                    await Application.Current.MainPage.DisplayAlert("Ops..", ex.Message + "Detalhes: " + ex.InnerException, "Ok");
+                }
+            }
+        }
+
+
+        private Personagem personagemSelecionado;
 
         public Personagem PersonagemSelecionado
         {
@@ -67,8 +113,39 @@ namespace AppRpgEtec.ViewModels.Personagens
                 {
                     personagemSelecionado = value;
 
-                    _ = ExibirOpcoesAsync(PersonagemSelecionado);
+                    _ = ExibirOpcoesAsync(personagemSelecionado);
                 }
+            }
+        }
+
+        public async Task ExibirOpcoesAsync(Personagem personagem)
+        {
+            try
+            {
+                personagemSelecionado = null;
+                string result = string.Empty;
+
+                if (personagem.PontosVida > 0)
+                {
+                    result = await Application.Current.MainPage.DisplayActionSheet("Opções para o personagem " + personagem.Nome,
+                        "Cancelar",
+                        "Editar Personagem",
+                        "Restaurar Pontos de Vida",
+                        "Zerar Ranking do Personagem",
+                        "Remover Personagem");
+                }
+                else
+                {
+                    result = await Application.Current.MainPage.DisplayActionSheet("Opções para o personagem " + personagem.Nome,
+                   "Cancelar",
+                   "Restaurar Pontos de Vida");
+                }
+                if (result != null)
+                    ProcessarOpcaoRespondidaAsync(personagem, result);
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert("Ops...", ex.Message, "Ok");
             }
         }
 
@@ -96,18 +173,6 @@ namespace AppRpgEtec.ViewModels.Personagens
             }
         }
 
-        public async Task ExecutarRestaurarPontosPersonagem(Personagem p)
-        {
-            await pService.PutRestaurarPontosAsync(p);
-        }
-        public async Task ExecutarZerarRankingPersonagem(Personagem p)
-        {
-            await pService.PutZerarRankingAsync(p);
-        }
-        public async Task ExecutarZerarRaankingRestaurarVidasGeral()
-        {
-            await pService.PutZerarRankingRestaurarVidasGeralAsync();
-        }
 
         public async void ProcessarOpcaoRespondidaAsync(Personagem personagem, string result)
         {
@@ -152,60 +217,6 @@ namespace AppRpgEtec.ViewModels.Personagens
             }
         }
 
-        public async Task ExibirOpcoesAsync(Personagem personagem)
-        {
-            try
-            {
-                personagemSelecionado = null;
-                string result = string.Empty;
 
-                if (personagem.PontosVida > 0)
-                {
-                    result = await Application.Current.MainPage
-                        .DisplayActionSheet("Opções para o personagem" + personagem.Nome,
-                            "Cancelar",
-                            "Editar Personagem",
-                            "Restaurar Pontos de Vida",
-                            "Zerar Ranking do Personagem",
-                            "Remover Personagem");
-                }
-                else
-                {
-                    result = await Application.Current.MainPage
-                        .DisplayActionSheet("Opções para o personagem " + personagem.Nome,
-                        "Cancelar",
-                        "Restaurar Pontos de Vida");
-                }
-
-                if (result != null)
-                    ProcessarOpcaoRespondidaAsync(personagem, result);
-            }
-            catch (Exception ex)
-            {
-                await Application.Current
-                    .MainPage.DisplayAlert("Ops...", ex.Message, "OK");
-            }
-        }
-
-        public async Task ZerarRankingRestaurarVidasGeral()
-        {
-            try
-            {
-                if (await Application.Current.MainPage.DisplayAlert("Confirmação", $"Deseja realmente zerar todo o ranking??", "Yes", "No"))
-                {
-                    await ExecutarZerarRaankingRestaurarVidasGeral();
-
-                    await Application.Current.MainPage
-                        .DisplayAlert("Informação", "Ranking zerado com sucesso.", "OK");
-
-                    await ObterPersonagens();
-                }
-            }
-            catch (Exception ex)
-            {
-                await Application.Current.MainPage
-                    .DisplayAlert("Ops...", ex.Message + "Detalhes: " + ex.InnerException, "OK");
-            }
-        }   
     }
 }

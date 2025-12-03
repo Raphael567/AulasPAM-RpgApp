@@ -16,11 +16,11 @@ namespace AppRpgEtec.Converters
             ColorTypeConverter converter = new ColorTypeConverter();
             int pontosVida = (int)value;
             if (pontosVida == 100)
-                return (Color)converter.ConvertFromInvariantString("SwaGreen");
+                return (Color)converter.ConvertFromInvariantString("Green");
             else if (pontosVida >= 75)
-                return (Color)converter.ConvertFromInvariantString("YellowGreen");
+                return (Color)converter.ConvertFromInvariantString("Yellow");
             else if (pontosVida >= 25)
-                return (Color)converter.ConvertFromInvariantString("OrangeRed");
+                return (Color)converter.ConvertFromInvariantString("Orange");
             else if (pontosVida >= 1)
                 return (Color)converter.ConvertFromInvariantString("Red");
 

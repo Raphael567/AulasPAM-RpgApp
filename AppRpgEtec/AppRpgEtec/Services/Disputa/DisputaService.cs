@@ -11,9 +11,7 @@ namespace AppRpgEtec.Services.Disputa
     {
         private readonly Request _request;
         private string _token;
-
-        private const string _apiUrlBase = "https://rpgraphael-dvejarfmgyfycwba.brazilsouth-01.azurewebsites.net/Disputas";
-
+        private const string _apiUrlBase = "https://rpglarissajefferson-braue0hjgsb4d3gq.brazilsouth-01.azurewebsites.net/Disputas";
         public DisputaService(string token)
         {
             _request = new Request();
@@ -26,12 +24,11 @@ namespace AppRpgEtec.Services.Disputa
             return await _request.PostAsync(_apiUrlBase + urlComplementar, d, _token);
         }
 
-        public async Task<Disputas> PostDisputaComHabilidadeAsync(Disputas d)
+        public async Task<Disputas> PostDisputaComHabilidadesAsync(Disputas d)
         {
             string urlComplementar = "/Habilidade";
             return await _request.PostAsync(_apiUrlBase + urlComplementar, d, _token);
         }
-
         public async Task<Disputas> PostDisputaGeralAsync(Disputas d)
         {
             string urlComplementar = "/DisputaEmGrupo";

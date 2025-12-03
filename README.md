@@ -1,3 +1,3 @@
 # AulasPAM-RpgApp
-# Dupla - Raphael e Hellen
+# Dupla - Raphael Canuto e Hellen Novi
 Repositório destinado as Aulas de PAM sobre o App Rpg
